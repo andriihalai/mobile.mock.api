@@ -3,9 +3,16 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const sharedConfig = {
+  client: "pg",
+  migrations: {
+    directory: "./dist/migrations",
+  },
+};
+
 const config: { [key: string]: Knex.Config } = {
   development: {
-    client: "pg",
+    ...sharedConfig,
     connection: {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
@@ -16,6 +23,11 @@ const config: { [key: string]: Knex.Config } = {
       directory: "./migrations",
       extension: "ts",
     },
+  },
+
+  production: {
+    ...sharedConfig,
+    connection: process.env.DATABASE_URL,
   },
 };
 
