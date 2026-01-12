@@ -24,7 +24,11 @@ module.exports = {
 
   production: {
     ...sharedConfig,
-    connection: process.env.DB_URL,
+    connection: {
+      connectionString: process.env.DB_URL,
+      ssl: process.env.DATABASE_CA_CERT ? { rejectUnauthorized: false } : false,
+      ca: process.env.DATABASE_CA_CERT,
+    },
     migrations: {
       directory: "./dist/migrations",
     },
