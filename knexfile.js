@@ -1,5 +1,3 @@
-import { Knex } from "knex";
-
 require("dotenv").config();
 
 const sharedConfig = {
@@ -9,7 +7,9 @@ const sharedConfig = {
   },
 };
 
-const knex: { [key: string]: Knex.Config } = {
+console.log("CA:", process.env.DB_CA_CERT);
+
+module.exports = {
   development: {
     ...sharedConfig,
     connection: {
