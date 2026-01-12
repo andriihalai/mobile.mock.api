@@ -20,7 +20,7 @@ const config: { [key: string]: Knex.Config } = {
       database: process.env.DB_NAME,
     },
     migrations: {
-      directory: "./migrations",
+      directory: "./src/migrations",
       extension: "ts",
     },
   },
@@ -28,6 +28,9 @@ const config: { [key: string]: Knex.Config } = {
   production: {
     ...sharedConfig,
     connection: process.env.DATABASE_URL,
+    migrations: {
+      directory: "./dist/migrations",
+    },
   },
 };
 
