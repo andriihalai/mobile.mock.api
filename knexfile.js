@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 
 const sharedConfig = {
   client: "pg",
@@ -26,8 +26,12 @@ module.exports = {
     ...sharedConfig,
     connection: {
       connectionString: process.env.DB_URL,
-      ssl: process.env.DATABASE_CA_CERT ? { rejectUnauthorized: false } : false,
-      ca: process.env.DATABASE_CA_CERT,
+      ssl: process.env.DATABASE_CA_CERT
+        ? {
+            ca: process.env.DATABASE_CA_CERT,
+            rejectUnauthorized: true,
+          }
+        : { rejectUnauthorized: false },
     },
     migrations: {
       directory: "./dist/migrations",
