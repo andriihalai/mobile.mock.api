@@ -2,15 +2,54 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express, { Request, Response, json } from "express";
+import helmet from "helmet";
+import cors from "cors";
+import morgan from "morgan";
 import { db } from "./knex";
 import { DeviceController } from "./controllers/device.controller";
 import { DeviceService } from "./services/device.service";
 
 const app = express();
+
+// Security middleware
+app.use(helmet());
+
+// CORS configuration
+const corsOptions = {
+  origin: process.env.CORS_ORIGIN || "*",
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
+// Request logging
+app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
+
+// Body parser
 app.use(json());
 
 const deviceService = new DeviceService(db);
 const deviceController = new DeviceController(deviceService);
+
+// Health check endpoint
+app.get("/health", async (req: Request, res: Response) => {
+  try {
+    // Check database connection
+    await db.raw("SELECT 1");
+    res.json({
+      status: "ok",
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      environment: process.env.NODE_ENV || "development",
+    });
+  } catch (error) {
+    console.error("Health check failed:", error);
+    res.status(503).json({
+      status: "error",
+      timestamp: new Date().toISOString(),
+      error: "Database connection failed",
+    });
+  }
+});
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello TypeScript + Express");

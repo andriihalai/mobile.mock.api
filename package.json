@@ -1,26 +1,46 @@
 {
   "name": "mobile.mock.api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Mobile Mock API for VivaSense devices",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "migrate:up": "knex migrate:latest",
-    "migrate:down": "knex migrate:rollback"
+    "migrate:down": "knex migrate:rollback",
+    "migrate:make": "knex migrate:make",
+    "migrate:status": "knex migrate:status",
+    "docker:build": "docker build -t mobile-mock-api .",
+    "docker:run": "docker-compose up -d",
+    "docker:stop": "docker-compose down",
+    "docker:logs": "docker-compose logs -f app"
   },
-  "keywords": [],
+  "keywords": [
+    "api",
+    "mock",
+    "vivasense",
+    "mobile"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "helmet": "^8.1.0",
     "knex": "^3.1.0",
+    "morgan": "^1.10.1",
     "pg": "^8.16.3"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^25.0.6",
     "@types/pg": "^8.16.0",
     "nodemon": "^3.1.11",
