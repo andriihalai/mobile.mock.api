@@ -1,7 +1,4 @@
-import type { Knex } from "knex";
-import dotenv from "dotenv";
-
-dotenv.config();
+require('dotenv').config();
 
 const sharedConfig = {
   client: "pg",
@@ -10,7 +7,7 @@ const sharedConfig = {
   },
 };
 
-const config: { [key: string]: Knex.Config } = {
+module.exports = {
   development: {
     ...sharedConfig,
     connection: {
@@ -27,11 +24,9 @@ const config: { [key: string]: Knex.Config } = {
 
   production: {
     ...sharedConfig,
-    connection: process.env.DATABASE_URL,
+    connection: process.env.DB_URL,
     migrations: {
       directory: "./dist/migrations",
     },
   },
 };
-
-export default config;
