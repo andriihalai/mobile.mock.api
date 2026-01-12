@@ -1,3 +1,5 @@
+import { Knex } from "knex";
+
 require("dotenv").config();
 
 const sharedConfig = {
@@ -7,7 +9,7 @@ const sharedConfig = {
   },
 };
 
-module.exports = {
+const knex: { [key: string]: Knex.Config } = {
   development: {
     ...sharedConfig,
     connection: {
@@ -25,13 +27,15 @@ module.exports = {
   production: {
     ...sharedConfig,
     connection: {
-      connectionString: process.env.DB_URL,
-      ssl: process.env.DATABASE_CA_CERT
-        ? {
-            ca: process.env.DATABASE_CA_CERT,
-            rejectUnauthorized: true,
-          }
-        : { rejectUnauthorized: false },
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      port: Number(process.env.DB_PORT),
+      ssl: {
+        rejectUnauthorized: true,
+        ca: process.env.DB_CA_CERT,
+      },
     },
     migrations: {
       directory: "./dist/migrations",
